@@ -23,7 +23,12 @@ router.post("/upload", upload.single("file"), async (req, res) => {
     res.json(dbFile);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Upload failed" });
+    
+    if (err.message === "File type not allowed") {
+      return res.status(400).json({ error: "File type not allowed. Please upload .txt, .jpg, .jpeg, .png, or .json files only." });
+    }
+    
+    res.status(500).json({ error: "Upload failed. Please try again." });
   }
 });
 
